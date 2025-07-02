@@ -2,8 +2,6 @@
 - name: "Building Parrot"
   hosts: localhost
   connection: local
-  become: yes
-  become_method: sudo
 
   roles:
     - role: "install-zsh"

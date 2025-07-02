@@ -7,7 +7,7 @@
     owner: "{{ ansible_env.USER }}"
     mode: "0644"
 - name: "Installing prerequisites"
-  ansible.builtin.package:
+    apt:
     name:
       - zsh
       - curl
