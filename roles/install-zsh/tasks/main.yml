@@ -1,0 +1,34 @@
+---
+- name: "Backup zshrc"
+  copy:
+    src: "{{ ansible_env.HOME }}/.zshrc"
+    dest: "{{ ansible_env.HOME }}/.zshrc.bak"
+    group: "{{ ansible_env.USER }}"
+    owner: "{{ ansible_env.USER }}"
+    mode: "0644"
+- name: "Installing prerequisites"
+  ansible.builtin.package:
+    name:
+      - zsh
+      - curl
+      - git
+    state: present
+    become: true
+    become_method: sudo
+- name: "Check for oh-my-zsh installation"
+  ansible.builtin.stat:
+    path: "/home/{{ zsh_user }}/.oh-my-zsh"
+  register: oh_my_zsh_install_check
+- name: "Download and install Oh-My-Zsh"
+  ansible.builtin.shell: |
+    curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended
+  args:
+    creates: "/home/{{ zsh_user }}/.oh-my-zsh"
+    become: yes
+    become_user: "{{ zsh_user }}"
+    when: not oh_my_zsh_install_check.stat.exists
+- name: "Setting zsh as the default shell"
+  ansible.builtin.user:
+    name: "{{ zsh_user }}"
+    shell: /bin/zsh
+  become: yes
