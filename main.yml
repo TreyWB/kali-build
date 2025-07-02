@@ -6,4 +6,4 @@
   become_method: sudo
 
   roles:
-    - role: "Install Zsh"
+    - role: "install-zsh"
