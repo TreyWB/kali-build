@@ -38,7 +38,7 @@
   ansible.builtin.user:
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh
-  become: yes
+  become: true
 
 - name: "Installing zsh plugins"
   ansible.builtin.git:
