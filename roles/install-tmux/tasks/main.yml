@@ -21,3 +21,13 @@
   become_user: root
   tags:
     - install-tmux
+
+- name: "Fetching tmux config from dotfiles"
+  ansible.builtin.copy:
+    src: "{{ ansible_env.HOME }}/dotfiles/kali/.tmux.conf"
+    dest: "{{ ansible_env.HOME }}/.tmux.conf"
+    group: "{{ ansible_env.USER }}"
+    owner: "{{ ansible_env.USER }}"
+    mode: "0644"
+  tags:
+    - install-tmux-config
