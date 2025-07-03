@@ -22,6 +22,14 @@
   tags:
     - install-tmux
 
+- name: "Installing tpm plugin manager"
+  ansible.builtin.git:
+    repo: "https://github.com/tmux-plugins/tpm"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    version: "master"
+  tags:
+    - install-tpm
+
 - name: "Fetching tmux config from dotfiles"
   ansible.builtin.copy:
     src: "{{ ansible_env.HOME }}/dotfiles/kali/.tmux.conf"
