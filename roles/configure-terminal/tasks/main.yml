@@ -1,0 +1,15 @@
+---
+- name: "Installing MATE terminal"
+  apt:
+    name:
+      - mate-terminal
+      - dconf-cli
+    state: present
+  become: true
+  become_method: sudo
+  tags:
+    - configure-terminal
+
+- name: "Configuring terminal profile"
+  shell:
+    cmd: "dconf load /org/mate/terminal/ < {{ ansible_env.HOME }}/dotfiles/kali/htb-mate-config"
