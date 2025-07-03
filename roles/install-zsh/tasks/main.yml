@@ -57,12 +57,12 @@
   tags:
     - install-zshrc
 
-- name: "Fetching .zsh_prompt from dotfiles"
-  ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/dotfiles/kali/.zsh_prompt"
-    dest: "{{ ansible_env.HOME }}/.zsh_prompt"
-    group: "{{ ansible_env.USER }}"
-    owner: "{{ ansible_env.USER }}"
-    mode: "0644"
-  tags:
-    - install-zsh_prompt
+# - name: "Fetching .zsh_prompt from dotfiles"
+#   ansible.builtin.copy:
+#     src: "{{ ansible_env.HOME }}/dotfiles/kali/.zsh_prompt"
+#     dest: "{{ ansible_env.HOME }}/.zsh_prompt"
+#     group: "{{ ansible_env.USER }}"
+#     owner: "{{ ansible_env.USER }}"
+#     mode: "0644"
+#   tags:
+#     - install-zsh_prompt
