@@ -21,7 +21,6 @@
       - git
     state: present
   become: true
-  become_method: sudo
 
 - name: "Checking for oh-my-zsh installation"
   ansible.builtin.stat:
