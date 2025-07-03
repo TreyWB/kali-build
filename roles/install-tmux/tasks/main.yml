@@ -1,0 +1,23 @@
+---
+- name: "Checking for existing tmux config"
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.tmux.conf"
+  register: tmux_config_check
+
+- name: "Backing up tmux config"
+  ansible.builtin.copy:
+    src: "{{ ansible_env.HOME }}/.tmux.conf"
+    dest: "{{ ansible_env.HOME }}/.tmux.conf.bak"
+    group: "{{ ansible_env.USER }}"
+    owner: "{{ ansible_env.USER }}"
+    mode: "0644"
+  when: tmux_config_check.stat.exists
+
+- name: "Installing tmux"
+  apt:
+    name: tmux
+    state: present
+  become: true
+  become_user: root
+  tags:
+    - install-tmux
