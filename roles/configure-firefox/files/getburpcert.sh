@@ -1,7 +1,7 @@
 #!/bin/bash
-
 burp=$(find / -name burp*.jar 2>/dev/null | tail -1)
-/bin/bash -c "timeout 45 /usr/share/burpsuite/jre/bin/java -Djava.awt.headless=true -jar $burp < <(echo y) &"
+java_cmd=$(which java || echo "/usr/bin/java")
+timeout 45 "$java_cmd" -Djava.awt.headless=true -jar "$burp" < <(echo y) &
 sleep 30
-curl http://127.0.0.1:8080/cert -o /tmp/cacert.der
+curl http://localhost:8080/cert -o /tmp/cacert.der
 exit
