@@ -4,7 +4,7 @@
       - pipenv
       - jq
     state: present
-    become: true
+  become: true
 
 - name: "Uninstalling unwanted tools"
   package:
