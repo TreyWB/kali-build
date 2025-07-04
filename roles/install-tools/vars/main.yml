@@ -1,2 +1,17 @@
 ---
-# vars file for install-tools
+Repos:
+  - repo: "fortra/impacket"
+    dest: "/opt/impacket"
+    version: "master"
+  - repo: "danielmiessler/SecLists"
+    dest: "/opt/SecLists"
+    version: "master"
+  - repo: "urbanadventurer/username-anarchy"
+    dest: "/opt/username-anarchy"
+    version: "master"
+  - repo: "samratashok/nishang"
+    dest: "/opt/nishang"
+    version: "master"
+  - repo: "WhiteWinterWolf/wwwolf-php-webshell"
+    dest: "/opt/wwwolf-php-webshell"
+    version: "master"
