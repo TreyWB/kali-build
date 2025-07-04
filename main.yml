@@ -8,3 +8,4 @@
     - role: "install-zsh"
     - role: "install-tmux"
     - role: "configure-terminal"
+    - role: "configure-firefox"
