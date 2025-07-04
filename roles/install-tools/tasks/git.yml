@@ -1,8 +1,8 @@
 - name: "Setting /opt ownership"
   ansible.builtin.file:
     path: "/opt"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
     mode: "0755"
   become: true
 
@@ -11,34 +11,43 @@
     state: directory
   register: build_dir_temp
 
-- name: "Installing impacket"
-  git:
-    repo: "https://github.com/fortra/impacket.git"
-    dest: "/opt/impacket"
-    version: master
-  become: true
 
-- name: "Installing SecLists"
-  git:
-    repo: "https://github.com/danielmiessler/SecLists.git"
-    dest: "/opt/SecLists"
-    version: master
-  become: true
+- name: "Checking for existing repositories"
+  block:
+    - name: "Check if repo already exists"
+      stat:
+        path: "{{ item.dest }}/.git"
+      register: repo_exists
+      delegate_to: localhost
+      run_once: false
 
-- name: "Installing UsernameAnarchy"
-  git:
-    repo: "https://github.com/urbanadventurer/username-anarchy.git"
-    dest: "/opt/username-anarchy"
-    version: master
-  become: true
+    - name: "Cloning repositories"
+      ansible.builtin.git:
+        repo: "https://github.com/{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        version: "{{ item.version }}"
+        update: no
+      when: not repo_exists.stat.exists
 
-- name: "Downloading Webshells (temp dir)"
+    - name: "Pulling latest changes"
+      ansible.builtin.git:
+        repo: "https://github.com/{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        version: "{{ item.version }}"
+        update: yes
+      when: repo_exists.stat.exists
+  loop: "{{ Repos }}"
+  loop_control:
+    label: "{{ item.repo }}"
+
+
+# Cannot `git pull` because of extraction
+- name: "Cloning Webshells (temp dir)"
   git:
     repo: "https://github.com/jbarcia/Web-Shells.git"
     dest: "{{ build_dir_temp.path }}/Web-Shells"
     version: master
   become: true
-
 - name: "Installing Laudanum"
   copy:
     src: "{{ build_dir_temp.path }}/Web-Shells/laudanum"
@@ -46,32 +55,19 @@
     mode: "0755"
   become: true
 
-- name: "Installing Nishang"
-  git:
-    repo: "https://github.com/samratashok/nishang.git"
-    dest: "/opt/nishang"
-    version: master
-  become: true
-
-- name: "Installing Wwolf's Web Shells"
-  git:
-    repo: "https://github.com/WhiteWinterWolf/wwwolf-php-webshell.git"
-    dest: "/opt/wwwolf-php-webshell"
-    version: master
-  become: true
-
-- name: "Installing RockYou"
+# No need to `git pull`
+- name: "Cloning RockYou"
   shell:
     cmd: "wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -O /opt/rockyou.txt"
   become: true
 
-- name: "Downloading TreyWB/PenTest repo"
+# Cannot `git pull` because of extraction
+- name: "Cloning TreyWB/PenTest repo"
   git:
     repo: "https://github.com/TreyWB/PenTest.git"
     dest: "{{ build_dir_temp.path }}/PenTest"
-    version: master
+    version: "main"
   become: true
-
 - name: "Installing TreyWB/PenTest repo"
   copy:
     src: "{{ build_dir_temp.path }}/PenTest/"
@@ -83,6 +79,7 @@
     force: yes
     exclude:
       - "README.me"
+
 
 - name: "Copying github release python script"
   copy:
@@ -109,6 +106,7 @@
   loop:
     - { path: "/opt/peas/linpeas.sh" }
     - { path: "/opt/kerbrute/kerbrute" }
+
 
 - name: "Cleaning up temp dir"
   ansible.builtin.file:
