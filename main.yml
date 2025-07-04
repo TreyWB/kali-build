@@ -4,11 +4,11 @@
   connection: local
 
   roles:
-    # - role: "clone-dotfiles"
-    # - role: "install-zsh"
-    # - role: "install-tmux"
-    # - role: "configure-terminal"
-    # - role: "configure-firefox"
+    - role: "clone-dotfiles"
+    - role: "install-zsh"
+    - role: "install-tmux"
+    - role: "configure-terminal"
+    - role: "configure-firefox"
     - role: gantsign.visual-studio-code
       users:
         - username: "{{ ansible_user_id }}" 
