@@ -1,0 +1,12 @@
+---
+- name: "Installing Docker"
+  ansible.builtin.include_tasks:
+    file: "docker.yml"
+
+- name: "Installing Apt Tools"
+  ansible.builtin.include_tasks:
+    file: "apt.yml"
+
+- name: "Installing Github Tools"
+  ansible.builtin.include_tasks:
+    file: "git.yml"

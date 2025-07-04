@@ -1,0 +1,38 @@
+- name: "Removing unofficial docker images"
+  package:
+    name:
+      - docker.io
+      - docker-compose
+      - docker-doc
+      - podman-docker
+    state: absent
+  register: docker_remove
+  become: true
+  become_method: sudo
+
+- name: "Adding Docker keyring to apt"
+  apt_key:
+    url: "https://download.docker.com/linux/debian/gpg"
+    state: present
+  become: true
+  become_method: sudo
+
+- name: "Installing Docker Repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ distribution }} stable"
+    state: present
+    update_cache: yes
+  become: true
+  become_method: sudo
+
+- name: "Installing Docker"
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: latest
+  become: true
+  become_method: sudo

@@ -10,6 +10,7 @@
     - role: "install-tmux"
     - role: "configure-terminal"
     - role: "configure-firefox"
+    - role: "install-tools"
     - role: gantsign.visual-studio-code
       users:
         - username: "{{ ansible_user_id }}" 

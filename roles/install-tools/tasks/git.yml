@@ -1,0 +1,117 @@
+- name: "Setting /opt ownership"
+  ansible.builtin.file:
+    path: "/opt"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+  become: true
+
+- name: "Create temporary build directory"
+  ansible.builtin.tempfile:
+    state: directory
+  register: build_dir_temp
+
+- name: "Installing impacket"
+  git:
+    repo: "https://github.com/fortra/impacket.git"
+    dest: "/opt/impacket"
+    version: master
+  become: true
+
+- name: "Installing SecLists"
+  git:
+    repo: "https://github.com/danielmiessler/SecLists.git"
+    dest: "/opt/SecLists"
+    version: master
+  become: true
+
+- name: "Installing UsernameAnarchy"
+  git:
+    repo: "https://github.com/urbanadventurer/username-anarchy.git"
+    dest: "/opt/username-anarchy"
+    version: master
+  become: true
+
+- name: "Downloading Webshells (temp dir)"
+  git:
+    repo: "https://github.com/jbarcia/Web-Shells.git"
+    dest: "{{ build_dir_temp.path }}/Web-Shells"
+    version: master
+  become: true
+
+- name: "Installing Laudanum"
+  copy:
+    src: "{{ build_dir_temp.path }}/Web-Shells/laudanum"
+    dest: "/opt/laudanum"
+    mode: "0755"
+  become: true
+
+- name: "Installing Nishang"
+  git:
+    repo: "https://github.com/samratashok/nishang.git"
+    dest: "/opt/nishang"
+    version: master
+  become: true
+
+- name: "Installing Wwolf's Web Shells"
+  git:
+    repo: "https://github.com/WhiteWinterWolf/wwwolf-php-webshell.git"
+    dest: "/opt/wwwolf-php-webshell"
+    version: master
+  become: true
+
+- name: "Installing RockYou"
+  shell:
+    cmd: "wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -O /opt/rockyou.txt"
+  become: true
+
+- name: "Downloading TreyWB/PenTest repo"
+  git:
+    repo: "https://github.com/TreyWB/PenTest.git"
+    dest: "{{ build_dir_temp.path }}/PenTest"
+    version: master
+  become: true
+
+- name: "Installing TreyWB/PenTest repo"
+  copy:
+    src: "{{ build_dir_temp.path }}/PenTest/"
+    dest: "/opt/"
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    remote_src: yes
+    force: yes
+    exclude:
+      - "README.me"
+
+- name: "Copying github release python script"
+  copy:
+    src: "files/githubdownload.py"
+    dest: "{{ build_dir.path }}/githubdownload.py"
+    owner: root
+    group: root
+    mode: 0755
+  become: true
+
+# TODO: Add Bloodhound & SharpHound & SharpCollection?
+
+- name: "Downloading Github Releases"
+  shell: "{{ build_dir.path }}/githubdownload.py {{ item.repo }} {{ item.regex }} {{ item.location }} {% if item.filename is defined %}{{ item.filename }}{% endif %}"
+  loop:
+    - { repo: "ropnop/kerbrute", regex: "_linux_amd64", location: "/opt", filename: "kerbrute" }
+    - { repo: "carlospolop/PEASS-ng",  regex: "linpeas.sh", location: "/opt/peas" }
+    - { repo: "carlospolop/PEASS-ng",  regex: "winPEASx64.exe", location: "/opt/peas" }
+
+- name: "Making binaries executable"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    mode: "0755"
+  loop:
+    - { path: "/opt/peas/linpeas.sh" }
+    - { path: "/opt/kerbrute/kerbrute" }
+
+- name: "Cleaning up temp dir"
+  ansible.builtin.file:
+    path: "{{ build_dir_temp.path }}"
+    state: absent
+  become: true
