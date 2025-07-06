@@ -11,6 +11,10 @@
   ansible.builtin.include_tasks:
     file: "git.yml"
 
+- name: "Installing Pipx Tools"
+  ansible.builtin.include_tasks:
+    file: "pipx.yml"
+
 - name: "Installing NVChad"
   ansible.builtin.include_tasks:
     file: "nvchad.yml"
