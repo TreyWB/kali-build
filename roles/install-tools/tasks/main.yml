@@ -1,8 +1,4 @@
 ---
-- name: "Installing Docker"
-  ansible.builtin.include_tasks:
-    file: "docker.yml"
-
 - name: "Installing Apt Tools"
   ansible.builtin.include_tasks:
     file: "apt.yml"
@@ -18,3 +14,7 @@
 - name: "Installing NVChad"
   ansible.builtin.include_tasks:
     file: "nvchad.yml"
+
+- name: "Installing Docker & BloodHound Community Edition"
+  ansible.builtin.include_tasks:
+    file: "docker-bloodhound.yml"

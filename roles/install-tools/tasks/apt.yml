@@ -4,6 +4,7 @@
       - pipenv
       - jq
       - ripgrep
+      - neo4j
     state: present
   become: true
 

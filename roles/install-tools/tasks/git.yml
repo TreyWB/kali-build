@@ -112,8 +112,6 @@
     mode: 0755
   become: true
 
-# TODO: Add Bloodhound & SharpHound & SharpCollection?
-
 - name: "Downloading Github Releases"
   shell: "{{ build_dir_temp.path }}/githubdownload.py {{ item.repo }} {{ item.regex }} {{ item.location }} {% if item.filename is defined %}{{ item.filename }}{% endif %}"
   loop:
