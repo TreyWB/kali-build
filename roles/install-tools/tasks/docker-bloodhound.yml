@@ -28,7 +28,7 @@
 
 - name: "Adding user to docker group"
   shell:
-    cmd: "sudo usermod -aG docker {{ ansible_user }}"
+    cmd: "sudo usermod -aG docker {{ ansible_user_id }}"
   become: true
 
 - name: "Creating BloodHound Directory in /opt"
@@ -36,7 +36,6 @@
     path: "/opt/BloodHound"
     state: directory
     mode: "0755"
-  become: true
 
 - name: "Downloading BloodHound Community Edition"
   shell:
@@ -44,4 +43,9 @@
 
 - name: "Extracting BloodHound CLI"
   shell:
-    cmd: "tar -xvzf /opt/BloodHound/bloodhound-cli-linux-amd64.tar.gz"
+    cmd: "tar -xvzf /opt/BloodHound/bloodhound-cli-linux-amd64.tar.gz -C /opt/BloodHound"
+
+- name: "Cleaning up tar file"
+  ansible.builtin.file:
+    path: "/opt/BloodHound/bloodhound-cli-linux-amd64.tar.gz"
+    state: absent

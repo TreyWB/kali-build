@@ -39,6 +39,7 @@
     dest: "{{ item.dest }}"
     version: "{{ item.version }}"
     update: yes
+    force: true
   when: repo_exists.results[my_idx].stat.exists
   loop: "{{ Repos }}"
   loop_control:
