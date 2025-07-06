@@ -34,9 +34,7 @@
     all_extensions_installed: false
   when: not vscode_extensions_dir.stat.exists
 
-- name: "Install VS Code and extensions"
+- name: "Include VS Code role when extensions are missing"
   include_role:
     name: gantsign.visual-studio-code
-    vars:
-      users: "{{ vscode_users }}"
   when: not all_extensions_installed 

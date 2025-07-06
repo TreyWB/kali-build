@@ -1,4 +1,2 @@
 ---
-dependencies:
-  - role: gantsign.visual-studio-code
-    when: not all_extensions_installed 
+# No dependencies - we include the gantsign.visual-studio-code role conditionally in tasks 

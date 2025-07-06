@@ -26,8 +26,8 @@ The role installs the following extensions by default:
 ### `vscode_extensions` (list)
 List of VS Code extension IDs to install. Defaults to the extensions listed above.
 
-### `vscode_users` (list)
-List of user configurations for VS Code. Defaults to the current user with the default extensions.
+### `users` (list)
+List of user configurations for VS Code. This variable is passed directly to the `gantsign.visual-studio-code` role. Defaults to the current user with the default extensions.
 
 ## Example Usage
 
@@ -54,7 +54,7 @@ List of user configurations for VS Code. Defaults to the current user with the d
 ```yaml
 - hosts: localhost
   vars:
-    vscode_users:
+    users:
       - username: "user1"
         visual_studio_code_extensions:
           - ms-python.python

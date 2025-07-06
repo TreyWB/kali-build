@@ -9,7 +9,7 @@ vscode_extensions:
   - tamasfe.even-better-toml
   - ms-python.python
 
-# VS Code user configuration
-vscode_users:
+# VS Code user configuration - this is what the gantsign.visual-studio-code role expects
+users:
   - username: "{{ ansible_user_id }}"
     visual_studio_code_extensions: "{{ vscode_extensions }}" 
