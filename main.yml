@@ -22,3 +22,9 @@
             - mechatroner.rainbow-csv
             - tamasfe.even-better-toml
             - ms-python.python
+
+  tasks:
+    - name: "Cleaning up dotfiles directory"
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/dotfiles"
+        state: absent
