@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: gantsign.visual-studio-code
+    when: not all_extensions_installed 

@@ -1,0 +1,15 @@
+---
+# Default VS Code extensions to install
+vscode_extensions:
+  - akamud.vscode-theme-onedark
+  - KevinRose.vsc-python-indent
+  - vscodevim.vim
+  - tomoki1207.pdf
+  - mechatroner.rainbow-csv
+  - tamasfe.even-better-toml
+  - ms-python.python
+
+# VS Code user configuration
+vscode_users:
+  - username: "{{ ansible_user_id }}"
+    visual_studio_code_extensions: "{{ vscode_extensions }}" 

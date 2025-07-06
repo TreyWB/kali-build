@@ -11,17 +11,7 @@
     - role: "configure-terminal"
     - role: "configure-firefox"
     - role: "install-tools"
-    - role: gantsign.visual-studio-code
-      users:
-        - username: "{{ ansible_user_id }}" 
-          visual_studio_code_extensions:
-            - akamud.vscode-theme-onedark
-            - KevinRose.vsc-python-indent
-            - vscodevim.vim
-            - tomoki1207.pdf
-            - mechatroner.rainbow-csv
-            - tamasfe.even-better-toml
-            - ms-python.python
+    - role: "install-vscode"
 
   tasks:
     - name: "Cleaning up dotfiles directory"
