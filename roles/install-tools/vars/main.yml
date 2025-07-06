@@ -15,3 +15,6 @@ Repos:
   - repo: "WhiteWinterWolf/wwwolf-php-webshell"
     dest: "/opt/wwwolf-php-webshell"
     version: "master"
+  - repo: "opengrep/opengrep-rules"
+    dest: "/opt/opengrep-rules"
+    version: "main"

@@ -72,9 +72,15 @@ def extract_gz(compressed_data, output_directory, name=None):
     try:
         if not name:
             name = get_gzip_name(compressed_data)
+        # Reset the BytesIO object to the beginning
+        compressed_data.seek(0)
         with gzip.open(compressed_data, "rb") as gz:
-            with open(output_directory + "/" + name, "wb") as f_out:
-                f_out.write(gz.read())
+            data = gz.read()
+            if isinstance(data, bytes):
+                with open(output_directory + "/" + name, "wb") as f_out:
+                    f_out.write(data)
+            else:
+                raise Exception("Failed to read gzip data as bytes")
     except Exception as e:
         raise Exception(e)
 
@@ -87,10 +93,16 @@ def extract_tar(compressed_data, out_file):
     try:
         gzip_header = compressed_data.getvalue()[:10]
         if gzip_header.startswith(b"\x1f\x8b"):
+            # Reset the BytesIO object to the beginning
+            compressed_data.seek(0)
             with gzip.open(compressed_data, "rb") as gz:
-                with tarfile.open(fileobj=gz, mode="r:gz") as tar:
-                    tar.extractall(path=out_file)    
-                    return
+                tar_data = gz.read()
+                if isinstance(tar_data, bytes):
+                    with tarfile.open(fileobj=io.BytesIO(tar_data), mode="r:") as tar:
+                        tar.extractall(path=out_file)    
+                        return
+                else:
+                    raise Exception("Failed to read gzip data as bytes")
         else:
             raise Exception("Unable to identify compression type")
     except Exception as e:
@@ -113,7 +125,7 @@ def extract_zip(compressed_data, out_file):
         raise Exception(e)
 
 
-def get_github_release(repo, regex, output_directory, name=None):
+def get_github_release(repo, regex, output_directory, name=None, manual_mode=False):
     """
     Get the latest release from Github and download the file that matches the regex.
     Returns: Nothing
@@ -124,18 +136,27 @@ def get_github_release(repo, regex, output_directory, name=None):
         url = get_github_release_url(metadata, regex)
         f_bytes = get_http_binary_file(url)
 
-        if url.endswith(".tar.gz"):
-            extract_tar(f_bytes, output_directory)
-        elif url.endswith(".gz"):
-            extract_gz(f_bytes, output_directory, name)
-        elif url.endswith(".zip"):
-            extract_zip(f_bytes, output_directory)
-        else:
+        if manual_mode:
+            # In manual mode, just save the file without extraction
             if not name:
                 # If no name is provided, use the name from the url.
                 name = url.split("/")[-1]
             with open(output_directory + "/" + name, "wb") as f_out:
                 f_out.write(f_bytes.read())
+        else:
+            # Normal extraction mode
+            if url.endswith(".tar.gz"):
+                extract_tar(f_bytes, output_directory)
+            elif url.endswith(".gz"):
+                extract_gz(f_bytes, output_directory, name)
+            elif url.endswith(".zip"):
+                extract_zip(f_bytes, output_directory)
+            else:
+                if not name:
+                    # If no name is provided, use the name from the url.
+                    name = url.split("/")[-1]
+                with open(output_directory + "/" + name, "wb") as f_out:
+                    f_out.write(f_bytes.read())
     except Exception as e:
         raise Exception(e)
 
@@ -159,16 +180,21 @@ if __name__ == "__main__":
         regex = sys.argv[2]
         output_directory = sys.argv[3]
         name = ''
+        manual_mode = False
 
-        if len(sys.argv) == 5:
+        if len(sys.argv) >= 5:
             name = sys.argv[4]
+        
+        if len(sys.argv) >= 6:
+            manual_mode = sys.argv[5].lower() == 'true'
 
         try:
-            get_github_release(repo, regex, output_directory, name)
+            get_github_release(repo, regex, output_directory, name, manual_mode)
             sys.exit(0)
         except Exception as e:
             print(e)
 
-    print("Usage: python gitdownload.py <repo> <regex> <output_directory> <name:optional>")
+    print("Usage: python gitdownload.py <repo> <regex> <output_directory> <name:optional> <manual_mode:optional>")
     print("Example: python gitdownload.py jpillora/chisel _darwin_amd64.gz /tmp chisel_darwin_amd64")
+    print("Example with manual mode: python gitdownload.py jpillora/chisel _darwin_amd64.gz /tmp chisel_darwin_amd64 true")
     sys.exit(1)

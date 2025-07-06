@@ -3,6 +3,7 @@
     name:
       - pipenv
       - jq
+      - ripgrep
     state: present
   become: true
 

@@ -10,3 +10,7 @@
 - name: "Installing Github Tools"
   ansible.builtin.include_tasks:
     file: "git.yml"
+
+- name: "Installing NVChad"
+  ansible.builtin.include_tasks:
+    file: "nvchad.yml"
