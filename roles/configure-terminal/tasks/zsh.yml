@@ -1,4 +1,3 @@
----
 - name: "Checking for zshrc"
   ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.zshrc"

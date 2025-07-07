@@ -6,8 +6,6 @@
   roles:
     - role: "update-system"
     - role: "clone-dotfiles"
-    - role: "install-zsh"
-    - role: "install-tmux"
     - role: "configure-terminal"
     - role: "configure-firefox"
     - role: "install-tools"

@@ -1,0 +1,43 @@
+- name: "Installing MATE terminal"
+  apt:
+    name:
+      - mate-terminal
+      - dconf-cli
+    state: present
+  become: true
+  become_method: sudo
+  tags:
+    - configure-terminal
+
+- name: "Ensure font installation directory exists"
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts/FiraCode"
+    state: directory
+    mode: '0755'
+
+- name: "Create temporary download directory if it doesn't exist"
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/Downloads/FiraCode"
+    state: directory
+    mode: '0755'
+
+- name: "Downloading FiraCode Nerd Font"
+  shell:
+    cmd: "wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip -O {{ ansible_env.HOME }}/Downloads/FiraCode/FiraCode.zip"
+
+- name: "Unzipping font files"
+  ansible.builtin.unarchive:
+    src: "{{ ansible_env.HOME }}/Downloads/FiraCode/FiraCode.zip"
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts/FiraCode"
+
+- name: "Clean up temporary download directory"
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/Downloads/FiraCode"
+    state: absent
+
+- name: "Updating font cache"
+  ansible.builtin.command: fc-cache -fv
+
+- name: "Configuring terminal profile"
+  shell:
+    cmd: "dconf load /org/mate/terminal/ < {{ ansible_env.HOME }}/dotfiles/kali/htb-mate-config"

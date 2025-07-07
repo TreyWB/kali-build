@@ -1,4 +1,3 @@
----
 - name: "Checking for existing tmux config"
   ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.tmux.conf"
