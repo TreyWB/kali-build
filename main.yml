@@ -10,6 +10,7 @@
     - role: "configure-firefox"
     - role: "install-tools"
     - role: "install-vscode"
+    - role: "configure-xfce"
 
   tasks:
     - name: "Cleaning up dotfiles directory"
