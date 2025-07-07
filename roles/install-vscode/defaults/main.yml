@@ -1,5 +1,5 @@
 ---
-# Default VS Code extensions to install
+# VS Code extensions to install
 vscode_extensions:
   - akamud.vscode-theme-onedark
   - KevinRose.vsc-python-indent
@@ -9,7 +9,7 @@ vscode_extensions:
   - tamasfe.even-better-toml
   - ms-python.python
 
-# VS Code user configuration - this is what the gantsign.visual-studio-code role expects
+# VS Code user configuration - Required for gantsign.visual-studio-code role
 users:
   - username: "{{ ansible_user_id }}"
-    visual_studio_code_extensions: "{{ vscode_extensions }}" 
+    visual_studio_code_extensions: "{{ vscode_extensions }}"

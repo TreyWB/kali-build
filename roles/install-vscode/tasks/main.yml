@@ -1,17 +1,17 @@
 ---
-- name: "Check for Visual Studio Code Installation"
+- name: "Checking for Visual Studio Code"
   ansible.builtin.stat:
     path: /usr/bin/code
   register: vscode_installed
 
-- name: "Install missing extensions via VS Code CLI"
+- name: "Installing VSCode"
+  include_role:
+    name: gantsign.visual-studio-code
+  when: not vscode_installed.stat.exists
+
+- name: "Installing/Updating VS Code extensions"
   ansible.builtin.command:
     cmd: "code --install-extension {{ item }}"
   loop: "{{ vscode_extensions }}"
   when: vscode_installed.stat.exists
   failed_when: false
-
-- name: "Include VS Code role when VS Code is not installed"
-  include_role:
-    name: gantsign.visual-studio-code
-  when: not vscode_installed.stat.exists
