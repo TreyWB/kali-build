@@ -97,11 +97,6 @@
     remote_src: yes
     force: yes
 
-# - name: "Checking for existing opengrep"
-#   stat:
-#     path: "/opt/opengrep"
-#   register: opengrep_exists
-
 - name: "Installing opengrep"
   shell:
     cmd: "curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash"
