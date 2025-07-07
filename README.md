@@ -5,8 +5,8 @@ Ansible Playbook to automatically configure Kali VMs (to my preferences). Will i
 Heavily inspired by [Ippsec](https://github.com/ippsec/parrot-build/) and his video series using Ansible for ParrotOS on [Youtube](https://youtube.com/playlist?list=PLidcsTyj9JXJVIFqyHBHzrRYKPpZYFjM8&si=6n2xfM20y4F5v_i1)
 
 ## Installation
-### 1. Download/Install Kali Linux
-(https://www.kali.org/get-kali/#kali-platforms)
+### 1. Download/Install [Kali Linux](https://www.kali.org/get-kali/#kali-platforms)
+- This playbook does not support Kali-WSL images
 
 ### 2. Install ansible
 ```bash
