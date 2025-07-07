@@ -13,5 +13,4 @@
   ansible.builtin.command:
     cmd: "code --install-extension {{ item }}"
   loop: "{{ vscode_extensions }}"
-  when: vscode_installed.stat.exists
   failed_when: false
