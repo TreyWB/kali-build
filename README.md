@@ -55,6 +55,8 @@ ansible-playbook main.yml --ask-become-pass
 ```bash
 cd /opt/BloodHound
 
+sudo systemctl start docker
+
 ./bloodhound-cli install
 ```
 - Bloodhound will display the default credentials and URL to access it over localhost
