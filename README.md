@@ -72,4 +72,4 @@ Port: 8080
 
 ### 5. Initialize Tmux Theme
 - Launch tmux in terminal: `tmux new`
-- Install Tmux plugins: `<Ctrl B> + <i>`
+- Finalize plugin installation: `<Ctrl B> + <i>`
