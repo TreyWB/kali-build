@@ -1,40 +1,17 @@
 ---
-- name: "Check if VS Code extensions directory exists"
+- name: "Check for Visual Studio Code Installation"
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.vscode/extensions"
-  register: vscode_extensions_dir
+    path: /usr/bin/code
+  register: vscode_installed
 
-- name: "Get list of installed VS Code extensions"
-  ansible.builtin.find:
-    paths: "{{ ansible_env.HOME }}/.vscode/extensions"
-    patterns: "*"
-    file_type: directory
-  register: installed_extensions
-  when: vscode_extensions_dir.stat.exists
-
-- name: "Check each required extension"
-  ansible.builtin.set_fact:
-    extension_installed: "{{ (installed_extensions.files | map(attribute='pathname') | map('basename') | list | select('regex', '^' + item + '-.*$') | list | length) > 0 }}"
+- name: "Install missing extensions via VS Code CLI"
+  ansible.builtin.command:
+    cmd: "code --install-extension {{ item }}"
   loop: "{{ vscode_extensions }}"
-  when: vscode_extensions_dir.stat.exists
-  register: extension_checks
+  when: vscode_installed.stat.exists
+  failed_when: false
 
-- name: "Set all_extensions_installed based on checks"
-  ansible.builtin.set_fact:
-    all_extensions_installed: "{{ extension_checks.results | map(attribute='ansible_facts.extension_installed') | list | all }}"
-  when: vscode_extensions_dir.stat.exists and extension_checks is defined
-
-- name: "Debug extension installation status"
-  ansible.builtin.debug:
-    msg: "VS Code extensions already installed: {{ all_extensions_installed }}"
-  when: vscode_extensions_dir.stat.exists
-
-- name: "Set default for all_extensions_installed"
-  ansible.builtin.set_fact:
-    all_extensions_installed: false
-  when: not vscode_extensions_dir.stat.exists
-
-- name: "Include VS Code role when extensions are missing"
+- name: "Include VS Code role when VS Code is not installed"
   include_role:
     name: gantsign.visual-studio-code
-  when: not all_extensions_installed 
+  when: not vscode_installed.stat.exists
