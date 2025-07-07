@@ -39,7 +39,7 @@
 
 - name: "Downloading BloodHound Community Edition"
   shell:
-    cmd: "wget https://github.com/SpecterOps/bloodhound-cli/releases/latest/download/bloodhound-cli-linux-amd64.tar.gz -O /opt/BloodHound/wget https://github.com/SpecterOps/bloodhound-cli/releases/latest/download/bloodhound-cli-linux-amd64.tar.gz"
+    cmd: "wget https://github.com/SpecterOps/bloodhound-cli/releases/latest/download/bloodhound-cli-linux-amd64.tar.gz -O /opt/BloodHound/bloodhound-cli-linux-amd64.tar.gz"
 
 - name: "Extracting BloodHound CLI"
   shell:
