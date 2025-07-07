@@ -1,0 +1,7 @@
+---
+- name: "Disabling Xfce Screensaver"
+  community.general.xfconf:
+    channel: "xfce4-screensaver"
+    property: "/saver/enabled"
+    value_type: bool
+    value: false
