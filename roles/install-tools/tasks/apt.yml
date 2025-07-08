@@ -5,6 +5,7 @@
       - jq
       - ripgrep
       - neo4j
+      - htop
     state: present
   become: true
 
