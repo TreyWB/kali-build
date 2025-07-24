@@ -63,7 +63,7 @@ Port: 8080
 
 ### 4. Initialize Tmux Theme
 - Launch tmux in terminal: `tmux new`
-- Finalize plugin installation: `<Ctrl B> + <i>`
+- Finalize plugin installation: `<Ctrl B> + <I>`
 
 ### 5. Complete BloodHound-CE Installation
 ```bash
