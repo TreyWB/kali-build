@@ -6,6 +6,7 @@
       - ripgrep
       - neo4j
       - htop
+      - python3-pyftpdlib
     state: present
   become: true
 
